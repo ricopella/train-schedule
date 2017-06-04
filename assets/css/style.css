@@ -1,0 +1,11 @@
+#head {
+    text-align: center;
+    background-color: #141f3d;
+    color: white;
+    padding: 2%;
+}
+
+.panel-custom {
+    background-color: #141f3d !important;
+    color: white !important;
+}
