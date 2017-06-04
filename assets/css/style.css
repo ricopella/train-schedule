@@ -9,3 +9,17 @@
     background-color: #141f3d !important;
     color: white !important;
 }
+
+table {
+    margin: 0 auto;
+}
+
+th {
+    margin: 1% 1% 0 1%;
+    padding: 3% 3% 0 3%;
+    width: 1%;
+}
+
+hr {
+    margin: 1%;
+}
