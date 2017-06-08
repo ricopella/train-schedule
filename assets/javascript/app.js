@@ -7,10 +7,7 @@
 
 On Page Load:
 
-- render schedule in localStorage
-
-
-
+- render schedule from firebase database
 
  */
 
@@ -30,13 +27,22 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 
-database.ref().on("value", function(snapshot) {
+database.ref().on("child_added", function(snapshot) {
+
+    console.log("the child_added data", snapshot.val());
+
+    //  create local variables to store the data from firebase
+
+    // compute the difference in time from 'now' and the first rain, store in var
+    // get the remainder of time after using 'mod' with the frequency, store in var
+    // subtract the remainder from the frequency, store in var
+
+    //  format 'timeInMintes' and store in var aka 'make pretty'
 
     // If firebase has train stored
     if (snapshot.child("trainObject").exists()) {
 
-        // function to display each train in the table
-
+        // append to our table of trains, inside tbody, with a new row of the train data
         $("tbody").append(
             "<tr><td>" + snapshot.val().name + "</td>" +
             "<td>" + snapshot.val().destination + "</td>" +
@@ -59,6 +65,7 @@ var storeTrain = function(event) {
     // get & store input values
     var trainName = $("#train-name").val().trim();
     var trainDestination = $("#train-destination").val().trim();
+    //  EDIT PARSE INTO UNIX TIMESTAMP w/ MOMENT
     var trainTime = $("#train-time").val().trim();
     var trainFrequency = $("#time-freq").val().trim();
 
@@ -69,19 +76,22 @@ var storeTrain = function(event) {
     trainObj.frequency = trainFrequency;
 
     // add to firebase databse
-    database.ref().set({
+    database.ref().push({
         trainObject: trainObj,
     });
     console.log("this should work3");
 
+    //  alert that train was added
+
 
     //  empty for once submitted
-    $("#train-name").clear();
-    $("#train-destination").clear();
-    $("#train-time").clear();
-    $("#time-freq").clear();
+    $("#train-name").val("");
+    $("#train-destination").val("");
+    $("#train-time").val("");
+    $("#time-freq").val("");
 };
 
+// on page load - ready the event handler function
 $(document).ready(function() {
     $("#btn-add").on("click", storeTrain);
 });
