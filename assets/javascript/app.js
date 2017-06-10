@@ -60,7 +60,6 @@ database.ref().on("child_added", function(snapshot) {
 
 // function to call the button event, and store the values in the input form
 $("#btn-add").on("click", function(event) {
-    console.log('clicked!');
     event.preventDefault();
 
     // get & store input values
@@ -68,15 +67,6 @@ $("#btn-add").on("click", function(event) {
     trainDestination = $("#train-destination").val().trim();
     trainTime = moment($("#train-time").val().trim(), "HH:mm").format();
     trainFrequency = $("#time-freq").val().trim();
-
-    // var trainObj = {};
-    // trainObj.name = trainName;
-    // trainObj.destination = trainDestination;
-    // trainObj.time = trainTime;
-    // trainObj.frequency = trainFrequency;
-    // trainObj.nextArrival = nextArrival;
-    // trainObj.minutesAway = minutesAway;
-    console.log("wtf yo!");
 
     // add to firebase databse
     database.ref().push({
@@ -88,7 +78,6 @@ $("#btn-add").on("click", function(event) {
         minutesAway: minutesAway,
         date_added: firebase.database.ServerValue.TIMESTAMP
     });
-    console.log("this should work3");
 
     //  alert that train was added
     alert("Train added!");
