@@ -39,11 +39,21 @@ database.ref().on("child_added", function(snapshot) {
     console.log("the child_added data", snapshot.val());
 
     //  create local variables to store the data from firebase
+    var trainDiff = 0;
+    var trainRemainder = 0;
+    var nowUNIX = moment().format("X");
+    var remainFreq = "";
 
-    // compute the difference in time from 'now' and the first rain, store in var
-    // get the remainder of time after using 'mod' with the frequency, store in var
+    // compute the difference in time from 'now' and the first train, store in var
+    trainDiff = nowUNIX - snapshot.val().time;
+    console.log("now " + nowUNIX + "trainTime " + snapshot.val().time);
+    console.log("Train Difference work? " + trainDiff);
+    // get the remainder of time after using 'moderator' with the frequency, store in var
+    trainRemainder = snapshot.val().time % snapshot.val().frequency;
+    console.log("Remainder: " + trainRemainder);
     // subtract the remainder from the frequency, store in var
-
+    remainFreq = snapshot.val().frequency - trainRemainder;
+    console.log("remaining Frequency: " + remainFreq);
     //  format 'timeInMintes' and store in var aka 'make pretty'
 
     // append to our table of trains, inside tbody, with a new row of the train data
@@ -65,7 +75,8 @@ $("#btn-add").on("click", function(event) {
     // get & store input values
     trainName = $("#train-name").val().trim();
     trainDestination = $("#train-destination").val().trim();
-    trainTime = moment($("#train-time").val().trim(), "HH:mm").format();
+    // saving time in UNIX value
+    trainTime = moment($("#train-time").val().trim(), "HH:mm").format("X");
     trainFrequency = $("#time-freq").val().trim();
 
     // add to firebase databse
