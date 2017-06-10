@@ -11,6 +11,12 @@ On Page Load:
 
  */
 
+var trainName = "";
+var trainDestination = "";
+var trainTime = "";
+var trainFrequency = "";
+var nextArrival = "";
+var minutesAway = "";
 
 // Initialize Firebase
 var config = {
@@ -21,6 +27,7 @@ var config = {
     storageBucket: "train-schedule-bd950.appspot.com",
     messagingSenderId: "236709814864"
 };
+
 firebase.initializeApp(config);
 
 // Assign the reference to the database to a variable named 'database'
@@ -39,59 +46,56 @@ database.ref().on("child_added", function(snapshot) {
 
     //  format 'timeInMintes' and store in var aka 'make pretty'
 
-    // If firebase has train stored
-    if (snapshot.child("trainObject").exists()) {
-
-        // append to our table of trains, inside tbody, with a new row of the train data
-        $("tbody").append(
-            "<tr><td>" + snapshot.val().name + "</td>" +
-            "<td>" + snapshot.val().destination + "</td>" +
-            "<td>" + snapshot.val().time + "</td>" +
-            "<td>" + snapshot.val().frequency + "</td><hr /></tr>"
-        )
-    } else {
-        $("#table-data").html("<h2>No Current Trains Scheduled</h2>");
-    };
-
-}, function(errorObject) {
-    console.log("The read failed: " + errorObject.code);
+    // append to our table of trains, inside tbody, with a new row of the train data
+    $("tbody").append(
+        "<tr><td>" + snapshot.val().name + "</td>" +
+        "<td>" + snapshot.val().destination + "</td>" +
+        "<td>" + snapshot.val().time + "</td>" +
+        "<td>" + snapshot.val().frequency + "</td>" +
+        "<td>" + snapshot.val().nextArrival + "</td>" +
+        "<td>" + snapshot.val().minutesAway + "</td>" +
+        "<hr /></tr>"
+    );
 });
 
 // function to call the button event, and store the values in the input form
-var storeTrain = function(event) {
-
+$("#btn-add").on("click", function(event) {
+    console.log('clicked!');
     event.preventDefault();
 
     // get & store input values
-    var trainName = $("#train-name").val().trim();
-    var trainDestination = $("#train-destination").val().trim();
-    //  EDIT PARSE INTO UNIX TIMESTAMP w/ MOMENT
-    var trainTime = $("#train-time").val().trim();
-    var trainFrequency = $("#time-freq").val().trim();
+    trainName = $("#train-name").val().trim();
+    trainDestination = $("#train-destination").val().trim();
+    trainTime = moment($("#train-time").val().trim(), "HH:mm").format();
+    trainFrequency = $("#time-freq").val().trim();
 
-    var trainObj = {};
-    trainObj.name = trainName;
-    trainObj.destination = trainDestination;
-    trainObj.time = trainTime;
-    trainObj.frequency = trainFrequency;
+    // var trainObj = {};
+    // trainObj.name = trainName;
+    // trainObj.destination = trainDestination;
+    // trainObj.time = trainTime;
+    // trainObj.frequency = trainFrequency;
+    // trainObj.nextArrival = nextArrival;
+    // trainObj.minutesAway = minutesAway;
+    console.log("wtf yo!");
 
     // add to firebase databse
     database.ref().push({
-        trainObject: trainObj,
+        name: trainName,
+        destination: trainDestination,
+        time: trainTime,
+        frequency: trainFrequency,
+        nextArrival: nextArrival,
+        minutesAway: minutesAway,
+        date_added: firebase.database.ServerValue.TIMESTAMP
     });
     console.log("this should work3");
 
     //  alert that train was added
-
+    alert("Train added!");
 
     //  empty for once submitted
     $("#train-name").val("");
     $("#train-destination").val("");
     $("#train-time").val("");
     $("#time-freq").val("");
-};
-
-// on page load - ready the event handler function
-$(document).ready(function() {
-    $("#btn-add").on("click", storeTrain);
 });
