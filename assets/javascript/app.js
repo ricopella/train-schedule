@@ -43,6 +43,7 @@ database.ref().on("child_added", function(snapshot) {
     var trainRemainder = 0;
     var nowUNIX = moment().format("X");
     var remainFreq = "";
+    var timeInMinutes = "";
 
     // compute the difference in time from 'now' and the first train, store in var
     trainDiff = nowUNIX - snapshot.val().time;
@@ -55,15 +56,15 @@ database.ref().on("child_added", function(snapshot) {
     remainFreq = snapshot.val().frequency - trainRemainder;
     console.log("remaining Frequency: " + remainFreq);
     //  format 'timeInMintes' and store in var aka 'make pretty'
+    timeInMinutes = moment(remainFreq).format("HH:mm");
 
     // append to our table of trains, inside tbody, with a new row of the train data
     $("tbody").append(
         "<tr><td>" + snapshot.val().name + "</td>" +
         "<td>" + snapshot.val().destination + "</td>" +
-        "<td>" + snapshot.val().time + "</td>" +
         "<td>" + snapshot.val().frequency + "</td>" +
-        "<td>" + snapshot.val().nextArrival + "</td>" +
-        "<td>" + snapshot.val().minutesAway + "</td>" +
+        "<td>" + timeInMinutes + "</td>" +
+        "<td>" + remainFreq + "</td>" +
         "<hr /></tr>"
     );
 });
