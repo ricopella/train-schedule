@@ -9,8 +9,4 @@ In this assignment, the object was to create a train schedule application that i
 
 ### Example Site
 
-<<<<<<< HEAD
 ![train homework](assets/images/train-schedule.png)
-=======
-![train homework](assets/images/train-schedule.png)
->>>>>>> 199adf9fb50ec1d73ad30a952eccf4d37d31676a
