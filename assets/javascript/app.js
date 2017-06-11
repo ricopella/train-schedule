@@ -3,6 +3,8 @@
 ///////////////////      SCHEDULE ////////////////////
 /////////////////////////////////////////////////////
 
+
+
 // Global Variables
 var trainName = "";
 var trainDestination = "";
@@ -10,6 +12,14 @@ var trainTime = "";
 var trainFrequency = "";
 var nextArrival = "";
 var minutesAway = "";
+
+// jQuery global variables
+var elTrain = $("#train-name");
+var elTrainDestination = $("#train-destination");
+// form validation for Time using jQuery Mask plugin
+var elTrainTime = $("#train-time").mask("00:00");
+var elTimeFreq = $("#time-freq").mask("00");
+
 
 // Initialize Firebase
 var config = {
@@ -27,8 +37,6 @@ firebase.initializeApp(config);
 var database = firebase.database();
 
 database.ref().on("child_added", function(snapshot) {
-    // log each object
-    console.log("the child_added data", snapshot.val());
 
     //  create local variables to store the data from firebase
     var trainDiff = 0;
@@ -39,16 +47,15 @@ database.ref().on("child_added", function(snapshot) {
 
     // compute the difference in time from 'now' and the first train using UNIX timestamp, store in var and convert to minutes
     trainDiff = moment().diff(moment.unix(snapshot.val().time), "minutes");
-    console.log("Difference in time " + trainDiff + " seconds");
+
     // get the remainder of time by using 'moderator' with the frequency & time difference, store in var
     trainRemainder = trainDiff % frequency;
-    console.log("Remainder: " + trainRemainder);
+
     // subtract the remainder from the frequency, store in var
     minutesTillArrival = frequency - trainRemainder;
-    console.log("Minutes Till Next Train: " + minutesTillArrival);
+
     // add minutesTillArrival to now, to find next train & convert to standard time format
     nextTrainTime = moment().add(minutesTillArrival, "m").format("hh:mm A");
-    console.log("Next Train Time: " + nextTrainTime);
 
     // append to our table of trains, inside tbody, with a new row of the train data
     $("#table-data").append(
@@ -61,14 +68,14 @@ database.ref().on("child_added", function(snapshot) {
 });
 
 // function to call the button event, and store the values in the input form
-$("#btn-add").on("click", function(event) {
+var storeInputs = function(event) {
     event.preventDefault();
 
     // get & store input values
-    trainName = $("#train-name").val().trim();
-    trainDestination = $("#train-destination").val().trim();
-    trainTime = moment($("#train-time").val().trim(), "HH:mm").subtract(1, "years").format("X");
-    trainFrequency = $("#time-freq").val().trim();
+    trainName = elTrain.val().trim();
+    trainDestination = elTrainDestination.val().trim();
+    trainTime = moment(elTrainTime.val().trim(), "HH:mm").subtract(1, "years").format("X");
+    trainFrequency = elTimeFreq.val().trim();
 
     // add to firebase databse
     database.ref().push({
@@ -85,8 +92,32 @@ $("#btn-add").on("click", function(event) {
     alert("Train successuflly added!");
 
     //  empty form once submitted
-    $("#train-name").val("");
-    $("#train-destination").val("");
-    $("#train-time").val("");
-    $("#time-freq").val("");
+    elTrain.val("");
+    elTrainDestination.val("");
+    elTrainTime.val("");
+    elTimeFreq.val("");
+};
+
+// Calls storeInputs function if submit button clicked
+$("#btn-add").on("click", function(event) {
+    // form validation - if empty - alert
+    if (elTrain.value == "" || elTrainDestination.value == "" || elTimeFreq.value == "") {
+        alert("Please Fill All Required Fields");
+    } else {
+        // if form is filled out, run function
+        storeInputs(event);
+    }
+});
+
+// Calls storeInputs function if enter key is clicked
+$('form').on("keypress", function(event) {
+    if (event.which === 13) {
+        // form validation - if empty - alert
+        if (elTrain.value == "" || elTrainDestination.value == "" || elTimeFreq.value == "") {
+            alert("Please Fill All Required Fields");
+            // if form is filled out, run function
+        } else {
+            storeInputs(event);
+        }
+    }
 });
