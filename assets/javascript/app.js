@@ -3,14 +3,7 @@
 ///////////////////      SCHEDULE ////////////////////
 /////////////////////////////////////////////////////
 
-/* Pseudo Code - by Narin Sundarabhaya
-
-On Page Load:
-
-- render schedule from firebase database
-
- */
-
+// Global Variables
 var trainName = "";
 var trainDestination = "";
 var trainTime = "";
@@ -33,9 +26,8 @@ firebase.initializeApp(config);
 // Assign the reference to the database to a variable named 'database'
 var database = firebase.database();
 
-
 database.ref().on("child_added", function(snapshot) {
-
+    // log each object
     console.log("the child_added data", snapshot.val());
 
     //  create local variables to store the data from firebase
@@ -57,8 +49,6 @@ database.ref().on("child_added", function(snapshot) {
     // add minutesTillArrival to now, to find next train & convert to standard time format
     nextTrainTime = moment().add(minutesTillArrival, "m").format("hh:mm A");
     console.log("Next Train Time: " + nextTrainTime);
-
-
 
     // append to our table of trains, inside tbody, with a new row of the train data
     $("#table-data").append(
@@ -92,9 +82,9 @@ $("#btn-add").on("click", function(event) {
     });
 
     //  alert that train was added
-    alert("Train added!");
+    alert("Train successuflly added!");
 
-    //  empty for once submitted
+    //  empty form once submitted
     $("#train-name").val("");
     $("#train-destination").val("");
     $("#train-time").val("");
