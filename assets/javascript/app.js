@@ -66,8 +66,7 @@ database.ref().on("child_added", function(snapshot) {
         "<td>" + snapshot.val().destination + "</td>" +
         "<td>" + frequency + "</td>" +
         "<td>" + minutesTillArrival + "</td>" +
-        "<td>" + nextTrainTime + "</td>" +
-        "<hr /></tr>"
+        "<td>" + nextTrainTime + "</td></tr>"
     );
 });
 
