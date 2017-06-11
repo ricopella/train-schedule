@@ -6,3 +6,7 @@ In this assignment, the object was to create a train schedule application that i
 
 ### Link
 [Train-Schedule](https://ricopella.github.io/train-schedule/)
+
+### Example Site
+
+![train homework](assets/images/train-schedule.png)
