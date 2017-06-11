@@ -41,30 +41,37 @@ database.ref().on("child_added", function(snapshot) {
     //  create local variables to store the data from firebase
     var trainDiff = 0;
     var trainRemainder = 0;
-    var nowUNIX = moment().format("X");
-    var remainFreq = "";
+    var nowUNIX = moment().unix();
+    var minutesTillArrival = "";
     var timeInMinutes = "";
+    var nextTrainTime = "";
+    var frequency = snapshot.val().frequency;
 
     // compute the difference in time from 'now' and the first train, store in var
     trainDiff = nowUNIX - snapshot.val().time;
-    console.log("now " + nowUNIX + "trainTime " + snapshot.val().time);
-    console.log("Train Difference work? " + trainDiff);
+    console.log("now " + nowUNIX + " trainTime " + snapshot.val().time);
+    console.log("Difference in time " + moment.unix(trainDiff).format("HH:mm"));
     // get the remainder of time after using 'moderator' with the frequency, store in var
-    trainRemainder = snapshot.val().time % snapshot.val().frequency;
+    trainRemainder = trainDiff % frequency;
     console.log("Remainder: " + trainRemainder);
     // subtract the remainder from the frequency, store in var
-    remainFreq = snapshot.val().frequency - trainRemainder;
-    console.log("remaining Frequency: " + remainFreq);
+    minutesTillArrival = frequency - trainRemainder;
+    console.log("Minutes Till Next Train: " + minutesTillArrival);
     //  format 'timeInMintes' and store in var aka 'make pretty'
-    timeInMinutes = moment(remainFreq).format("HH:mm");
+    timeInMinutes = moment(minutesTillArrival).format("mm");
+    // add minutesTillArrival to now, to find next train
+    nextTrainTime = nowUNIX + minutesTillArrival;
+    console.log("Next Train Time: " + moment.unix(nextTrainTime).format("HH:mm"));
+
+
 
     // append to our table of trains, inside tbody, with a new row of the train data
     $("tbody").append(
         "<tr><td>" + snapshot.val().name + "</td>" +
         "<td>" + snapshot.val().destination + "</td>" +
         "<td>" + snapshot.val().frequency + "</td>" +
-        "<td>" + timeInMinutes + "</td>" +
-        "<td>" + remainFreq + "</td>" +
+        "<td>" + moment.unix(nextTrainTime).format("HH:mm") + "</td>" +
+        "<td>" + minutesTillArrival + "</td>" +
         "<hr /></tr>"
     );
 });
