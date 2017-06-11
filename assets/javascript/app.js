@@ -45,7 +45,7 @@ database.ref().on("child_added", function(snapshot) {
     var minutesTillArrival = "";
     var timeInMinutes = "";
     var nextTrainTime = "";
-    var frequency = snapshot.val().frequency;
+    var frequency = snapshot.val().frequency * 60;
 
     // compute the difference in time from 'now' and the first train, store in var
     trainDiff = nowUNIX - snapshot.val().time;
@@ -58,7 +58,7 @@ database.ref().on("child_added", function(snapshot) {
     minutesTillArrival = frequency - trainRemainder;
     console.log("Minutes Till Next Train: " + minutesTillArrival);
     //  format 'timeInMintes' and store in var aka 'make pretty'
-    timeInMinutes = moment(minutesTillArrival).format("mm");
+    timeInMinutes = moment.unix(minutesTillArrival).format("HH:mm");
     // add minutesTillArrival to now, to find next train
     nextTrainTime = nowUNIX + minutesTillArrival;
     console.log("Next Train Time: " + moment.unix(nextTrainTime).format("HH:mm"));
@@ -66,12 +66,12 @@ database.ref().on("child_added", function(snapshot) {
 
 
     // append to our table of trains, inside tbody, with a new row of the train data
-    $("tbody").append(
+    $("#table-data").append(
         "<tr><td>" + snapshot.val().name + "</td>" +
         "<td>" + snapshot.val().destination + "</td>" +
         "<td>" + snapshot.val().frequency + "</td>" +
         "<td>" + moment.unix(nextTrainTime).format("HH:mm") + "</td>" +
-        "<td>" + minutesTillArrival + "</td>" +
+        "<td>" + moment.unix(minutesTillArrival).format("mm") + "</td>" +
         "<hr /></tr>"
     );
 });
