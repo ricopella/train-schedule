@@ -41,27 +41,22 @@ database.ref().on("child_added", function(snapshot) {
     //  create local variables to store the data from firebase
     var trainDiff = 0;
     var trainRemainder = 0;
-    var nowUNIX = moment().unix();
     var minutesTillArrival = "";
-    var timeInMinutes = "";
     var nextTrainTime = "";
-    var frequency = snapshot.val().frequency * 60;
+    var frequency = snapshot.val().frequency;
 
-    // compute the difference in time from 'now' and the first train, store in var
-    trainDiff = nowUNIX - snapshot.val().time;
-    console.log("now " + nowUNIX + " trainTime " + snapshot.val().time);
-    console.log("Difference in time " + moment.unix(trainDiff).format("HH:mm"));
-    // get the remainder of time after using 'moderator' with the frequency, store in var
+    // compute the difference in time from 'now' and the first train using UNIX timestamp, store in var and convert to minutes
+    trainDiff = moment().diff(moment.unix(snapshot.val().time), "minutes");
+    console.log("Difference in time " + trainDiff + " seconds");
+    // get the remainder of time by using 'moderator' with the frequency & time difference, store in var
     trainRemainder = trainDiff % frequency;
     console.log("Remainder: " + trainRemainder);
     // subtract the remainder from the frequency, store in var
     minutesTillArrival = frequency - trainRemainder;
     console.log("Minutes Till Next Train: " + minutesTillArrival);
-    //  format 'timeInMintes' and store in var aka 'make pretty'
-    timeInMinutes = moment.unix(minutesTillArrival).format("HH:mm");
-    // add minutesTillArrival to now, to find next train
-    nextTrainTime = nowUNIX + minutesTillArrival;
-    console.log("Next Train Time: " + moment.unix(nextTrainTime).format("HH:mm"));
+    // add minutesTillArrival to now, to find next train & convert to standard time format
+    nextTrainTime = moment().add(minutesTillArrival, "m").format("hh:mm A");
+    console.log("Next Train Time: " + nextTrainTime);
 
 
 
@@ -69,9 +64,9 @@ database.ref().on("child_added", function(snapshot) {
     $("#table-data").append(
         "<tr><td>" + snapshot.val().name + "</td>" +
         "<td>" + snapshot.val().destination + "</td>" +
-        "<td>" + snapshot.val().frequency + "</td>" +
-        "<td>" + moment.unix(nextTrainTime).format("HH:mm") + "</td>" +
-        "<td>" + moment.unix(minutesTillArrival).format("mm") + "</td>" +
+        "<td>" + frequency + "</td>" +
+        "<td>" + nextTrainTime + "</td>" +
+        "<td>" + minutesTillArrival + "</td>" +
         "<hr /></tr>"
     );
 });
@@ -83,8 +78,7 @@ $("#btn-add").on("click", function(event) {
     // get & store input values
     trainName = $("#train-name").val().trim();
     trainDestination = $("#train-destination").val().trim();
-    // saving time in UNIX value
-    trainTime = moment($("#train-time").val().trim(), "HH:mm").format("X");
+    trainTime = moment($("#train-time").val().trim(), "HH:mm").subtract(1, "years").format("X");
     trainFrequency = $("#time-freq").val().trim();
 
     // add to firebase databse
