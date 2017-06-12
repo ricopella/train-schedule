@@ -4,11 +4,8 @@
 
 #head {
     text-align: center;
-    /*background-color: #141f3d;*/
-    background-image: url("../images/red.jpg");
-    background-repeat: no-repeat;
-    background-size: 100%;
-    color: black;
+    background-color: #141f3d;
+    color: white;
     padding: 2%;
 }
 

@@ -36,7 +36,7 @@ firebase.initializeApp(config);
 // Assign the reference to the database to a variable named 'database'
 var database = firebase.database();
 
-database.ref().on("child_added", function(snapshot) {
+database.ref("/trains").on("child_added", function(snapshot) {
 
     //  create local variables to store the data from firebase
     var trainDiff = 0;
@@ -78,7 +78,7 @@ var storeInputs = function(event) {
     trainFrequency = elTimeFreq.val().trim();
 
     // add to firebase databse
-    database.ref().push({
+    database.ref("/trains").push({
         name: trainName,
         destination: trainDestination,
         time: trainTime,
@@ -122,13 +122,15 @@ $('form').on("keypress", function(event) {
     }
 });
 
-$(".icon-hidden").on("click", function() {
-    console.log("click");
-    var trainRef = database.ref().child("train-schedule-bd950");
+// STARTED BONUS TO REMOVE ITEMS
 
-    console.log(trainRef);
+// $(document).on("click", '.icon-hidden', function() {
+//     console.log("click");
+//     var trainRef = database.ref("/trains/");
 
-});
+//     console.log(trainRef);
+
+// });
 
 // Hover view of delete button
 // $("#table-data.tr").on("mouseover", function() {
