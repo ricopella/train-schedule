@@ -4,8 +4,11 @@
 
 #head {
     text-align: center;
-    background-color: #141f3d;
-    color: white;
+    /*background-color: #141f3d;*/
+    background-image: url("../images/red.jpg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    color: black;
     padding: 2%;
 }
 
@@ -32,6 +35,11 @@ td {
     margin: 1% 1% 0 1%;
     padding: 3% 3% 0 3%;
     width: 1%;
+}
+
+h1 img {
+    width: 5%;
+    padding-bottom: 1%;
 }
 
 
