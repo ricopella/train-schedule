@@ -39,12 +39,12 @@ h1 img {
     padding-bottom: 1%;
 }
 
-
-/*
-tbody>tr span {
-    visibility: hidden;
+.glyphicon-remove {
+    color: darkred;
+    padding-left: 15%;
 }
 
-tbody>tr span:hover {
-    visibility: visible;
-}*/
+.form-control:focus {
+    border-color: #141f3d;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px #141f3d;
+}

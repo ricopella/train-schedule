@@ -71,17 +71,23 @@ database.ref("/trains").on("child_added", function(snapshot) {
     // Hover view of delete button
     $("tr").hover(
         function() {
-            console.log(this);
-            console.log("mouse over");
             $(this).find("span").show();
         },
         function() {
             $(this).find("span").hide();
         });
+
+    // STARTED BONUS TO REMOVE ITEMS ** not finished **
+    $("#table-data").on("click", "tr span", function() {
+        console.log(this);
+        var trainRef = database.ref("/trains/");
+        console.log(trainRef);
+    });
 });
 
 // function to call the button event, and store the values in the input form
 var storeInputs = function(event) {
+    // prevent from from reseting
     event.preventDefault();
 
     // get & store input values
@@ -134,13 +140,3 @@ $('form').on("keypress", function(event) {
         }
     }
 });
-
-// STARTED BONUS TO REMOVE ITEMS
-
-// $(document).on("click", '.icon-hidden', function() {
-//     console.log("click");
-//     var trainRef = database.ref("/trains/");
-
-//     console.log(trainRef);
-
-// });
