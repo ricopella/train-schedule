@@ -65,6 +65,19 @@ database.ref("/trains").on("child_added", function(snapshot) {
         "<td>" + minutesTillArrival + "</td>" +
         "<td>" + nextTrainTime + "  " + "<a><span class='glyphicon glyphicon-remove icon-hidden' aria-hidden='true'></span></a>" + "</td></tr>"
     );
+
+    $("span").hide();
+
+    // Hover view of delete button
+    $("tr").hover(
+        function() {
+            console.log(this);
+            console.log("mouse over");
+            $(this).find("span").show();
+        },
+        function() {
+            $(this).find("span").hide();
+        });
 });
 
 // function to call the button event, and store the values in the input form
@@ -130,11 +143,4 @@ $('form').on("keypress", function(event) {
 
 //     console.log(trainRef);
 
-// });
-
-// Hover view of delete button
-// $("#table-data.tr").on("mouseover", function() {
-//     console.log(this);
-//     console.log("mouse over");
-//     // $(this).find("span").css("visibility", "visible");
 // });
