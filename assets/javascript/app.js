@@ -63,7 +63,7 @@ database.ref().on("child_added", function(snapshot) {
         "<td>" + snapshot.val().destination + "</td>" +
         "<td>" + frequency + "</td>" +
         "<td>" + minutesTillArrival + "</td>" +
-        "<td>" + nextTrainTime + "</td></tr>"
+        "<td>" + nextTrainTime + "  " + "<a><span class='glyphicon glyphicon-remove icon-hidden' aria-hidden='true'></span></a>" + "</td></tr>"
     );
 });
 
@@ -101,7 +101,7 @@ var storeInputs = function(event) {
 // Calls storeInputs function if submit button clicked
 $("#btn-add").on("click", function(event) {
     // form validation - if empty - alert
-    if (elTrain.value == "" || elTrainDestination.value == "" || elTimeFreq.value == "") {
+    if (elTrain.val().length === 0 || elTrainDestination.val().length === 0 || elTrainTime.val().length === 0 || elTimeFreq === 0) {
         alert("Please Fill All Required Fields");
     } else {
         // if form is filled out, run function
@@ -113,11 +113,26 @@ $("#btn-add").on("click", function(event) {
 $('form').on("keypress", function(event) {
     if (event.which === 13) {
         // form validation - if empty - alert
-        if (elTrain.value == "" || elTrainDestination.value == "" || elTimeFreq.value == "") {
+        if (elTrain.val().length === 0 || elTrainDestination.val().length === 0 || elTrainTime.val().length === 0 || elTimeFreq === 0) {
             alert("Please Fill All Required Fields");
-            // if form is filled out, run function
         } else {
+            // if form is filled out, run function
             storeInputs(event);
         }
     }
 });
+
+$(".icon-hidden").on("click", function() {
+    console.log("click");
+    var trainRef = database.ref().child("train-schedule-bd950");
+
+    console.log(trainRef);
+
+});
+
+// Hover view of delete button
+// $("#table-data.tr").on("mouseover", function() {
+//     console.log(this);
+//     console.log("mouse over");
+//     // $(this).find("span").css("visibility", "visible");
+// });

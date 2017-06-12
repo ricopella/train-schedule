@@ -15,9 +15,14 @@ In this assignment, the objective was to create a train schedule application tha
   * Calculate when the next train will arrive; relative to the current time.
   * Users from many different machines must be able to view same train times.
 
+### Added Functionality
+
+* Form Validation for correct time input
+
+
 ### Link
 [Train-Schedule](https://ricopella.github.io/train-schedule/)
 
 ### Example Site
 
-![train homework](assets/images/train-schedule.png)
+![Train-Schedule](assets/images/train-schedule.png)
